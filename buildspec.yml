@@ -14,9 +14,14 @@ phases:
       - cd lambda
       - zip -r ../lambda.zip .
       - cd ..
+      - echo Running CloudFormation package...
+      - aws cloudformation package \
+          --template-file cloudformation/main.yml \
+          --s3-bucket <devops-training-artifacts-chintan-agari> \
+          --output-template-file output.yml
   post_build:
     commands:
       - echo Build completed.
 artifacts:
   files:
-    - lambda.zip
+    - output.yml
