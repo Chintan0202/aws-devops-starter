@@ -7,18 +7,16 @@ phases:
   pre_build:
     commands:
       - echo Installing dependencies...
-      - pip install -r lambda/requirements.txt -t lambda/ || true
+      - pip install -r lambda/requirements.txt -t lambda/
   build:
     commands:
-      - echo Zipping Lambda function...
-      - cd lambda && zip -r ../lambda.zip . && cd ..
+      - echo Packaging Lambda function...
+      - cd lambda
+      - zip -r ../lambda.zip .
+      - cd ..
   post_build:
     commands:
-      - echo Uploading artifacts to S3 bucket: $ARTIFACT_BUCKET
-      - test -n "$ARTIFACT_BUCKET" || (echo "ERROR: ARTIFACT_BUCKET env var is required" && exit 1)
-      - aws s3 cp lambda.zip s3://$ARTIFACT_BUCKET/lambda.zip --exact-timestamps
-      - aws s3 sync cloudformation/ s3://$ARTIFACT_BUCKET/cloudformation/ --exact-timestamps --exclude "*" --include "*.yml"
-      - echo Build completed successfully.
+      - echo Build completed.
 artifacts:
   files:
-    - cloudformation/*.yml
+    - lambda.zip

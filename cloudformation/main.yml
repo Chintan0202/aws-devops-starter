@@ -1,55 +1,24 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: Main stack for EC2, Lambda, and IAM nested stacks
-
-Parameters:
-  KeyName:
-    Type: String
-    Description: EC2 Key Pair name for SSH (must exist in this region)
-  TemplateBucketName:
-    Type: String
-    Description: S3 bucket where CodeBuild uploads CFN templates
-  ArtifactBucketName:
-    Type: String
-    Description: S3 bucket where CodeBuild uploads lambda.zip
-  LambdaKey:
-    Type: String
-    Default: lambda.zip
-    Description: S3 key for Lambda zip inside ArtifactBucketName
-  InstanceType:
-    Type: String
-    Default: t2.micro
+Description: Main stack for EC2, Lambda, Roles
 
 Resources:
   IAMRolesStack:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: !Sub "https://s3.${AWS::Region}.amazonaws.com/${TemplateBucketName}/cloudformation/roles.yml"
-
+      TemplateURL: ./roles.yml
+  
   LambdaStack:
     Type: AWS::CloudFormation::Stack
     DependsOn: IAMRolesStack
     Properties:
-      TemplateURL: !Sub "https://s3.${AWS::Region}.amazonaws.com/${TemplateBucketName}/cloudformation/lambda-deploy.yml"
-      Parameters:
-        ArtifactBucketName: !Ref ArtifactBucketName
-        LambdaKey: !Ref LambdaKey
-
-  EC2SecurityGroup:
-    Type: AWS::EC2::SecurityGroup
-    Properties:
-      GroupDescription: Enable HTTP access
-      SecurityGroupIngress:
-        - IpProtocol: tcp
-          FromPort: 80
-          ToPort: 80
-          CidrIp: 0.0.0.0/0
+      TemplateURL: ./lambda-deploy.yml
 
   EC2Instance:
     Type: AWS::EC2::Instance
     Properties:
-      ImageId: ami-0c02fb55956c7d316  # us-east-1 Amazon Linux 2
-      InstanceType: !Ref InstanceType
-      KeyName: my-ec2-key
+      ImageId: ami-0c02fb55956c7d316  # Amazon Linux 2, change if needed
+      InstanceType: t2.micro
+      KeyName: my-ec2-key  # Replace with your EC2 key pair name
       SecurityGroups:
         - !Ref EC2SecurityGroup
       UserData:
@@ -60,3 +29,13 @@ Resources:
           systemctl enable httpd
           systemctl start httpd
           echo "<html><h1>Hello from EC2!</h1></html>" > /var/www/html/index.html
+
+  EC2SecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Enable HTTP access
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0

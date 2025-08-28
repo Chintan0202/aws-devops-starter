@@ -17,10 +17,7 @@ Resources:
             Statement:
               - Effect: Allow
                 Action:
-                  - s3:GetObject
-                  - s3:PutObject
-                  - s3:GetBucketLocation
-                  - s3:ListBucket
+                  - s3:*
                   - codebuild:*
                   - cloudformation:*
                   - iam:PassRole
@@ -45,10 +42,7 @@ Resources:
             Statement:
               - Effect: Allow
                 Action:
-                  - s3:GetObject
-                  - s3:PutObject
-                  - s3:GetBucketLocation
-                  - s3:ListBucket
+                  - s3:*
                   - cloudformation:*
                   - lambda:*
                   - ec2:*
