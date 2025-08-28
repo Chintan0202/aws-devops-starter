@@ -1,24 +1,29 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Description: Main stack for EC2, Lambda, Roles
 
+Parameters:
+  ArtifactBucket:
+    Type: String
+    Description: S3 bucket where CodePipeline/CodeBuild uploaded the artifacts
+
 Resources:
   IAMRolesStack:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: !Sub "https://s3.${AWS::Region}.amazonaws.com/${ArtifactBucket}/cloudformation/roles.yml"
-  
+      TemplateURL: !Sub "https://${ArtifactBucket}.s3.${AWS::Region}.amazonaws.com/cloudformation/roles.yml"
+
   LambdaStack:
     Type: AWS::CloudFormation::Stack
     DependsOn: IAMRolesStack
     Properties:
-      TemplateURL: !Sub "https://s3.${AWS::Region}.amazonaws.com/${ArtifactBucket}/cloudformation/lambda-deploy.yml"
+      TemplateURL: !Sub "https://${ArtifactBucket}.s3.${AWS::Region}.amazonaws.com/cloudformation/lambda-deploy.yml"
 
   EC2Instance:
     Type: AWS::EC2::Instance
     Properties:
-      ImageId: ami-0c02fb55956c7d316  # Amazon Linux 2, change if needed
+      ImageId: ami-0c02fb55956c7d316
       InstanceType: t2.micro
-      KeyName: my-ec2-key  # Replace with your EC2 key pair name
+      KeyName: my-ec2-key
       SecurityGroups:
         - !Ref EC2SecurityGroup
       UserData:
