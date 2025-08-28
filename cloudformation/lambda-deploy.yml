@@ -1,4 +1,13 @@
 AWSTemplateFormatVersion: '2010-09-09'
+Parameters:
+  ArtifactBucketName:
+    Type: String
+    Description: S3 bucket where lambda.zip is stored
+  LambdaKey:
+    Type: String
+    Default: lambda.zip
+    Description: Key of Lambda zip inside ArtifactBucketName
+
 Resources:
   LambdaExecutionRole:
     Type: AWS::IAM::Role
@@ -28,10 +37,7 @@ Resources:
       Handler: app.lambda_handler
       Role: !GetAtt LambdaExecutionRole.Arn
       Code:
-        S3Bucket: !Ref DeploymentBucket
-        S3Key: lambda.zip
+        S3Bucket: !Ref ArtifactBucketName
+        S3Key: !Ref LambdaKey
       Runtime: python3.9
       Timeout: 10
-
-  DeploymentBucket:
-    Type: AWS::S3::Bucket
