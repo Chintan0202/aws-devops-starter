@@ -20,7 +20,7 @@ Resources:
                   - s3:*
                   - codebuild:*
                   - cloudformation:*
-                  - iam:PassRole
+                  - iam:*
                   - lambda:*
                   - ec2:*
                 Resource: "*"
@@ -47,4 +47,5 @@ Resources:
                   - lambda:*
                   - ec2:*
                   - logs:*
+                  - iam:*
                 Resource: "*"
