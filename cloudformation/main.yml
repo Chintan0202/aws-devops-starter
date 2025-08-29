@@ -10,13 +10,13 @@ Resources:
   IAMRolesStack:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: !Sub "https://aws-devops-starter-bucket.s3.${AWS::Region}.amazonaws.com/cloudformation/roles.yml"
+      TemplateURL: !Sub "https://codepipelinestartertempla-codepipelineartifactsbuc-hnjsfpngnnvi.s3.${AWS::Region}.amazonaws.com/cloudformation/roles.yml"
 
   LambdaStack:
     Type: AWS::CloudFormation::Stack
     DependsOn: IAMRolesStack
     Properties:
-      TemplateURL: !Sub "https://aws-devops-starter-bucket.s3.${AWS::Region}.amazonaws.com/cloudformation/lambda-deploy.yml"
+      TemplateURL: !Sub "https://codepipelinestartertempla-codepipelineartifactsbuc-hnjsfpngnnvi.s3.${AWS::Region}.amazonaws.com/cloudformation/lambda-deploy.yml"
 
   EC2Instance:
     Type: AWS::EC2::Instance
