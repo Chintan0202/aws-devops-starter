@@ -10,19 +10,19 @@ Resources:
   IAMRolesStack:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: !Sub "https://aws-devops-starter-bucket.s3.us-east-1.amazonaws.com/awsdevopsstarter/cloudformation/roles.yml"
+      TemplateURL: !Sub "https://aws-devops-starter-bucket.s3.us-east-1.amazonaws.com/awsdevopsstarter/cloudformation/roles.yml" #here i gave s3 bucket url
 
   LambdaStack:
     Type: AWS::CloudFormation::Stack
     DependsOn: IAMRolesStack
     Properties:
-      TemplateURL: !Sub "https://aws-devops-starter-bucket.s3.us-east-1.amazonaws.com/awsdevopsstarter/cloudformation/lambda-deploy.yml"
+      TemplateURL: !Sub "https://aws-devops-starter-bucket.s3.us-east-1.amazonaws.com/awsdevopsstarter/cloudformation/lambda-deploy.yml" #here i gave s3 bucket url
 
   EC2Instance:
     Type: AWS::EC2::Instance
     Properties:
       ImageId: ami-0c02fb55956c7d316
-      InstanceType: t3.micro
+      InstanceType: t3.micro #change instance type as t2.micro not supported in my region for free tier
       KeyName: my-ec2-key
       SecurityGroups:
         - !Ref EC2SecurityGroup

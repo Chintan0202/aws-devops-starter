@@ -16,13 +16,13 @@ phases:
       - cd ..
   post_build:
     commands:
-      - echo Uploading lambda.zip to S3...
+      - echo Uploading lambda.zip to S3...  # here i code for to build zip file and save in my bucket
       - aws s3 cp lambda.zip s3://aws-devops-starter-bucket/lambda.zip
       - echo Build completed.
 
 artifacts:
   files:
-    - cloudformation/**/*
+    - cloudformation/**/* # here changes for saving my file to s3bucket
     - lambda/**/*
     - frontend/**/*
     - buildspec.yml
