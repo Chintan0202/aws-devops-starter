@@ -16,6 +16,8 @@ phases:
       - cd ..
   post_build:
     commands:
+      - echo Uploading lambda.zip to S3...
+      - aws s3 cp lambda.zip s3://$ArtifactBucket/lambda.zip
       - echo Build completed.
 
 artifacts:
